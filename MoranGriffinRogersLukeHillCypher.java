@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.util.ArrayList;
+
 public class MoranGriffinRogersLukeHillCypher{
 	public static HashMap<Integer, Character> letterMapSetup(){
 		HashMap<Integer, Character> map = new HashMap<>();
@@ -99,9 +101,59 @@ public class MoranGriffinRogersLukeHillCypher{
     }
 
     //Hill cypher decryption
-    public static int[] decrypt(int[] plaintext, int[][] encryptionKey){
-        return null;
+    
+	
+    public static int[] decrypt(int[] ciphertext, int[][] decryptionKey) {
+
+		boolean needZ = false;
+
+		//check for extra space
+		if(ciphertext.length % 2 != 0){
+			needZ = true;
+		}
+        int mod = 26;
+		int[] plainText = new int[needZ ? ciphertext.length + 1 : ciphertext.length];
+		ArrayList<int[]> pairs = new ArrayList<>();
+		for (int i = 0; i < ciphertext.length - 1; i += 2) {
+			int[] pair = {ciphertext[i], ciphertext[i + 1]};
+			pairs.add(pair);
+		}
+		if (needZ) {
+			plainText[-1] = 25;
+		}
+		int i = 0;
+		for (int[] encPair : pairs) {
+			int[] pair = matrixMult(decryptionKey, encPair);
+			if (pair[0] < 0) {
+				plainText[i++] = positiveModulo(pair[0], mod);
+			}
+			plainText[i++] = positiveModulo(pair[1], mod);
+
+		}
+
+
+		return plainText;
+	}
+
+	private static int[] matrixMult(int[][] matrix2x2, int[] matrix1x2) {
+        // Result will be a 1x2 matrix
+        int[] result = new int[2];
+        
+        // Perform the multiplication
+        result[0] = matrix2x2[0][0] * matrix1x2[0] + matrix2x2[0][1] * matrix1x2[1];
+        result[1] = matrix2x2[1][0] * matrix1x2[0] + matrix2x2[1][1] * matrix1x2[1];
+		
+        return result;
+	}
+	public static int positiveModulo(int a, int mod) {
+        int result = a % mod;
+        if (result < 0) {
+            result += mod;
+        }
+        return result;
     }
+
+	
 
 	//small personal test
 	public static void eTest0(){
@@ -126,10 +178,15 @@ public class MoranGriffinRogersLukeHillCypher{
 		for(int i = 0; i < str.length(); i++){
 			run[i] = numMap.get(str.charAt(i));
 		}
-
+		
 		int[] e = encrypt(run, a);
 		for(int i = 0; i < e.length; i++){
 			System.out.print(chrMap.get(e[i]));
+		}
+		System.out.println();
+		int[] d = decrypt(e, findDecryptionKey(a));
+		for(int i = 0; i < d.length; i++){
+			System.out.print(chrMap.get(d[i]));
 		}
 		System.out.println();
 		
