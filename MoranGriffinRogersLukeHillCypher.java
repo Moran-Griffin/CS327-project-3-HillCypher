@@ -174,12 +174,15 @@ public class MoranGriffinRogersLukeHillCypher{
 		final HashMap<Character, Integer> numMap = numberMapSetup();
         int[][] a = {{16,7},{9,14}};
 		String str = "JMUCSISCOOL";
+
 		int[] run = new int[str.length()];
 		for(int i = 0; i < str.length(); i++){
 			run[i] = numMap.get(str.charAt(i));
-		}
-		
+		}		
 		int[] e = encrypt(run, a);
+		int[][] key = findDecryptionKey(a);
+		System.out.println("Decryption key: " +key[0][0] + " " + key[0][1] + " " + key[1][0] + " " + key[1][1]);
+
 		for(int i = 0; i < e.length; i++){
 			System.out.print(chrMap.get(e[i]));
 		}
@@ -193,8 +196,7 @@ public class MoranGriffinRogersLukeHillCypher{
 	}
 
      public static void main(String[] args) {
-		eTest0();
-		System.out.println();
+		//eTest0();
 		eTest1();
 		
     }
