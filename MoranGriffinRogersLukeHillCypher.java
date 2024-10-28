@@ -186,8 +186,14 @@ public class MoranGriffinRogersLukeHillCypher{
 		for(int i = 0; i < e.length; i++){
 			System.out.print(chrMap.get(e[i]));
 		}
+		
+		String str2 = "MQGVGQSMJI";
+		int[] run2 = new int[str2.length()];
+		for(int i = 0; i < str2.length(); i++){
+			run2[i] = numMap.get(str2.charAt(i));
+		}
 		System.out.println();
-		int[] d = decrypt(e, findDecryptionKey(a));
+		int[] d = decrypt(run2, findDecryptionKey(a));
 		for(int i = 0; i < d.length; i++){
 			System.out.print(chrMap.get(d[i]));
 		}
